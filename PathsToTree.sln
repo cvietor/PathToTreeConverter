@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathsToTree", "PathsToTree\PathsToTree.csproj", "{A59510C3-7DB7-44A1-BD63-BD9731576048}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathsToTree.Tests", "PathsToTree.Tests\PathsToTree.Tests.csproj", "{0CC9EFE0-6B00-4D73-B926-C6CAA9DAE4C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A59510C3-7DB7-44A1-BD63-BD9731576048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A59510C3-7DB7-44A1-BD63-BD9731576048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A59510C3-7DB7-44A1-BD63-BD9731576048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A59510C3-7DB7-44A1-BD63-BD9731576048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CC9EFE0-6B00-4D73-B926-C6CAA9DAE4C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CC9EFE0-6B00-4D73-B926-C6CAA9DAE4C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CC9EFE0-6B00-4D73-B926-C6CAA9DAE4C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CC9EFE0-6B00-4D73-B926-C6CAA9DAE4C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
