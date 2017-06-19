@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace PathsToTree.Tests
 {
     [TestFixture]
-    public class ProgramTests
+    public class PathToTreeConverterTests
     {
         [Test]
         public void Convert_Should_Throw_Exception_When_Any_Path_Starts_With_Delimiter_Symbol()
