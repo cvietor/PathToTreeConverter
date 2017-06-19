@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace PathsToTree.Tests
 {
     [TestFixture]
-    public class ProgramTests
+    public class PathToTreeConverterTests
     {
         //[Test]
         //public void Convert_Should_Throw_Exception_When_Any_Path_Starts_With_Delimiter_Symbol()
@@ -17,7 +17,7 @@ namespace PathsToTree.Tests
         //        "/subFolder2/subsubfolder1b",
         //    };
 
-        //    var sut = new IlyPathConverter();
+        //    var sut = new PathToTreeConverter();
         //    Assert.Throws<ArgumentException>(() => sut.Convert(paths));
         //}
 
@@ -26,10 +26,15 @@ namespace PathsToTree.Tests
         {
             char delimiterSymbol = '%';
 
-            var sut = new IlyPathConverter();
+            var sut = CreateSut();
             sut.SetDelimiterSymbol(delimiterSymbol);
 
             Assert.That(sut.DelimiterSymbol, Is.EqualTo('%'));
+        }
+
+        private static PathToTreeConverter CreateSut()
+        {
+            return new PathToTreeConverter();
         }
 
         [Test]
@@ -43,10 +48,10 @@ namespace PathsToTree.Tests
                 "subFolder2/subsubfolder1b",
             };
 
-            var sut = new IlyPathConverter();
+            var sut = CreateSut();
 
             var result = sut.Convert(paths);
-            
+
             Assert.That(result, Has.Count.EqualTo(2));
         }
 
@@ -61,13 +66,13 @@ namespace PathsToTree.Tests
                 "subFolder2/subsubfolder1b",
                 "subFolder2/subsubfolder2b",
                 "subfolder3",
-                "subfolder4/",
+                "subfolder4/"
             };
 
-            var sut = new IlyPathConverter();
+            var sut = CreateSut();
 
             var result = sut.Convert(paths);
-            
+
             Assert.That(result[0].Children, Has.Count.EqualTo(1));
             Assert.That(result[1].Children, Has.Count.EqualTo(2));
             Assert.That(result[2].Children, Has.Count.EqualTo(0));
@@ -81,12 +86,12 @@ namespace PathsToTree.Tests
             var paths = new[]
             {
                 "sub1/sub1/subsub",
-                "sub1/sub1_1/subsub", 
-                "sub1/sub1_1/subsub2", 
+                "sub1/sub1_1/subsub",
+                "sub1/sub1_1/subsub2",
                 "sub2/sub2/subsub",
             };
 
-            var sut = new IlyPathConverter();
+            var sut = CreateSut();
 
             var result = sut.Convert(paths);
 

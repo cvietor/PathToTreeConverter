@@ -6,6 +6,10 @@ namespace PathsToTree
 {
     public class PathToTreeConverter
     {
+        private TreeElement _rootNode = null;
+        private IList<TreeElement> _folderStructure = new List<TreeElement>();
+
+
         public PathToTreeConverter()
         {
             DelimiterSymbol = System.Convert.ToChar("/");
@@ -15,58 +19,76 @@ namespace PathsToTree
 
         public IList<TreeElement> Convert(string[] paths)
         {
-            return BuildTree(paths).ToList();
+            foreach (var path in paths)
+            {
+                var nodes = path.Split(DelimiterSymbol).ToList();
+                var name = $"/{nodes[0]}";
+                var root = _folderStructure.FirstOrDefault((n) => n.Name == name);
+
+                if (root == null)
+                {
+                    root = new TreeElement() { Name = name };
+                    _folderStructure.Add(root);
+
+                    if (nodes.Count == 1)
+                    {
+                        continue;
+                    }
+
+                    var children = nodes.GetRange(1, nodes.Count - 1).Where((c) => c != "").ToList();
+                    if (children.Count > 0)
+                        CreateNode(root, children);
+                }
+                else
+                {
+                    if (nodes.Count == 1)
+                    {
+                        continue;
+                    }
+
+                    var children = nodes.GetRange(1, nodes.Count - 1).Where((c) => c != "").ToList();
+                    if (children.Count > 0)
+                        CreateNode(root, children);
+                }
+            }
+
+            var debug = true;
+            return _folderStructure;
+        }
+
+        private TreeElement CreateNode(TreeElement current, List<string> nodes)
+        {
+            string name = string.Format("{0}/{1}", current.Name, nodes[0]);
+
+            TreeElement node = current.Children.FirstOrDefault((c) => c.Name == name);
+
+            if (node != null)
+            {
+                if (nodes.Count == 1)
+                {
+                    return node;
+                }
+
+                var children = nodes.GetRange(1, nodes.Count - 1).Where((c) => c != "").ToList();
+                if (children.Count > 0)
+                    CreateNode(node, children);
+            }
+            else
+            {
+                node = new TreeElement() { Name = name };
+                current.Children.Add(node);
+
+                var children = nodes.GetRange(1, nodes.Count - 1).Where((c) => c != "").ToList();
+                if (children.Count > 0)
+                    CreateNode(node, children);
+            }
+
+            return node;
         }
 
         public void SetDelimiterSymbol(char symbol)
         {
             DelimiterSymbol = symbol;
-        }
-
-        private IList<TreeElement> BuildTree(IList<string> paths)
-        {
-            Validate(paths);
-
-            var list = new List<TreeElement>();
-
-            var rootPaths = GroupByRootPaths(paths);
-
-            foreach (var rootPath in rootPaths)
-            {
-                var childPaths = GetChildPaths(rootPath);
-                var childElements = BuildTree(childPaths);
-
-                list.Add(new TreeElement
-                {
-                    Name = rootPath.Key,
-                    Children = childElements
-                });
-            }
-            return list;
-        }
-
-        private void Validate(IList<string> paths)
-        {
-            if (paths == null) throw new ArgumentNullException(nameof(paths));
-
-            if (paths.Any(path => path.StartsWith(DelimiterSymbol.ToString())))
-                throw new ArgumentException($"paths are not allowed to begin with delimiter symbol: {DelimiterSymbol}");
-        }
-
-        private IList<string> GetChildPaths(IGrouping<string, string> rootPath)
-        {
-            var result = rootPath
-                .Where(path => !path.Equals(rootPath.Key))
-                .Where(path => !path.Equals(rootPath.Key + DelimiterSymbol))
-                .Select(path => path.Replace(rootPath.Key + DelimiterSymbol, string.Empty))
-                .ToList();
-
-            return result;
-        }
-
-        private IEnumerable<IGrouping<string, string>> GroupByRootPaths(IEnumerable<string> paths)
-        {
-            return paths.GroupBy(path => path.Split(DelimiterSymbol)[0]);
         }
     }
 }
