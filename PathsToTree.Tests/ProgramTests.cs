@@ -6,27 +6,27 @@ namespace PathsToTree.Tests
     [TestFixture]
     public class ProgramTests
     {
-        [Test]
-        public void Convert_Should_Throw_Exception_When_Any_Path_Starts_With_Delimiter_Symbol()
-        {
-            var paths = new[]
-            {
-                "/subFolder1",
-                "subFolder1/subsubfolder1a",
-                "subFolder2",
-                "/subFolder2/subsubfolder1b",
-            };
+        //[Test]
+        //public void Convert_Should_Throw_Exception_When_Any_Path_Starts_With_Delimiter_Symbol()
+        //{
+        //    var paths = new[]
+        //    {
+        //        "/subFolder1",
+        //        "subFolder1/subsubfolder1a",
+        //        "subFolder2",
+        //        "/subFolder2/subsubfolder1b",
+        //    };
 
-            var sut = new PathToTreeConverter();
-            Assert.Throws<ArgumentException>(() => sut.Convert(paths));
-        }
+        //    var sut = new IlyPathConverter();
+        //    Assert.Throws<ArgumentException>(() => sut.Convert(paths));
+        //}
 
         [Test]
         public void Set_Delimiter_Symbol_Should_Succeed()
         {
             char delimiterSymbol = '%';
 
-            var sut = new PathToTreeConverter();
+            var sut = new IlyPathConverter();
             sut.SetDelimiterSymbol(delimiterSymbol);
 
             Assert.That(sut.DelimiterSymbol, Is.EqualTo('%'));
@@ -43,7 +43,7 @@ namespace PathsToTree.Tests
                 "subFolder2/subsubfolder1b",
             };
 
-            var sut = new PathToTreeConverter();
+            var sut = new IlyPathConverter();
 
             var result = sut.Convert(paths);
             
@@ -64,7 +64,7 @@ namespace PathsToTree.Tests
                 "subfolder4/",
             };
 
-            var sut = new PathToTreeConverter();
+            var sut = new IlyPathConverter();
 
             var result = sut.Convert(paths);
             
@@ -72,6 +72,28 @@ namespace PathsToTree.Tests
             Assert.That(result[1].Children, Has.Count.EqualTo(2));
             Assert.That(result[2].Children, Has.Count.EqualTo(0));
             Assert.That(result[3].Children, Has.Count.EqualTo(0));
+        }
+
+
+        [Test]
+        public void Convert_Should_Have_GeIL_Children_Count()
+        {
+            var paths = new[]
+            {
+                "sub1/sub1/subsub",
+                "sub2/sub2/subsub",
+            };
+
+            var sut = new IlyPathConverter();
+
+            var result = sut.Convert(paths);
+
+            Assert.That(result[0].Children, Has.Count.EqualTo(1));
+            Assert.That(result[0].Children[0].Children, Has.Count.EqualTo(1));
+
+
+            Assert.That(result[1].Children, Has.Count.EqualTo(1));
+            Assert.That(result[1].Children[0].Children, Has.Count.EqualTo(1));
         }
     }
 }
