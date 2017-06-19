@@ -81,6 +81,8 @@ namespace PathsToTree.Tests
             var paths = new[]
             {
                 "sub1/sub1/subsub",
+                "sub1/sub1_1/subsub", 
+                "sub1/sub1_1/subsub2", 
                 "sub2/sub2/subsub",
             };
 
@@ -88,8 +90,9 @@ namespace PathsToTree.Tests
 
             var result = sut.Convert(paths);
 
-            Assert.That(result[0].Children, Has.Count.EqualTo(1));
+            Assert.That(result[0].Children, Has.Count.EqualTo(2));
             Assert.That(result[0].Children[0].Children, Has.Count.EqualTo(1));
+            Assert.That(result[0].Children[1].Children, Has.Count.EqualTo(2));
 
 
             Assert.That(result[1].Children, Has.Count.EqualTo(1));
