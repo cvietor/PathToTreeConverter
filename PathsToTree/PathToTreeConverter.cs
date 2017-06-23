@@ -8,25 +8,25 @@ namespace PathsToTree
     {
         public PathToTreeConverter()
         {
-            DelimiterSymbol = System.Convert.ToChar("/");
+            DelimiterSymbol = "/";
         }
 
-        public char DelimiterSymbol { get; private set; }
+        public string DelimiterSymbol { get; private set; }
 
         public IList<TreeElement> Convert(string[] paths)
         {
+            Validate(paths);
+
             return BuildTree(paths).ToList();
         }
 
-        public void SetDelimiterSymbol(char symbol)
+        public void SetDelimiterSymbol(string symbol)
         {
             DelimiterSymbol = symbol;
         }
 
         private IList<TreeElement> BuildTree(IList<string> paths)
         {
-            Validate(paths);
-
             var list = new List<TreeElement>();
 
             var rootPaths = GroupByRootPaths(paths);
@@ -48,25 +48,34 @@ namespace PathsToTree
         private void Validate(IList<string> paths)
         {
             if (paths == null) throw new ArgumentNullException(nameof(paths));
-
-            if (paths.Any(path => path.StartsWith(DelimiterSymbol.ToString())))
-                throw new ArgumentException($"paths are not allowed to begin with delimiter symbol: {DelimiterSymbol}");
         }
 
         private IList<string> GetChildPaths(IGrouping<string, string> rootPath)
         {
-            var result = rootPath
-                .Where(path => !path.Equals(rootPath.Key))
-                .Where(path => !path.Equals(rootPath.Key + DelimiterSymbol))
-                .Select(path => path.Replace(rootPath.Key + DelimiterSymbol, string.Empty))
-                .ToList();
+            var splitted = rootPath.Select(r => r.Split(DelimiterSymbol.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)).ToList();
+
+
+            var result = new List<string>();
+            foreach (var s in splitted)
+            {
+                if (s.Length <= 1) continue;
+
+                var childPath = string.Join(DelimiterSymbol, s.ToList().GetRange(1, s.Length - 1));
+                result.Add(childPath);
+            }
+
 
             return result;
         }
 
-        private IEnumerable<IGrouping<string, string>> GroupByRootPaths(IEnumerable<string> paths)
+        private IEnumerable<IGrouping<string, string>> GroupByRootPaths(IList<string> paths)
         {
-            return paths.GroupBy(path => path.Split(DelimiterSymbol)[0]);
+            if (paths.All(p => p.StartsWith(DelimiterSymbol)))
+            {
+                return paths.GroupBy(path => path.Split(System.Convert.ToChar(DelimiterSymbol))[1]);
+            }
+
+            return paths.GroupBy(path => path.Split(System.Convert.ToChar(DelimiterSymbol))[0]);
         }
     }
 }
