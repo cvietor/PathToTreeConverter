@@ -52,7 +52,7 @@ namespace PathsToTree
 
         private IList<string> GetChildPaths(IGrouping<string, string> rootPath)
         {
-            var splitted = rootPath.Select(r => r.Split(DelimiterSymbol.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)).ToList();
+            var splitted = rootPath.Select(SplitByDelimiter).ToList();
 
 
             var result = new List<string>();
@@ -70,12 +70,19 @@ namespace PathsToTree
 
         private IEnumerable<IGrouping<string, string>> GroupByRootPaths(IList<string> paths)
         {
-            if (paths.All(p => p.StartsWith(DelimiterSymbol)))
-            {
-                return paths.GroupBy(path => path.Split(System.Convert.ToChar(DelimiterSymbol))[1]);
-            }
+            IEnumerable<IGrouping<string, string>> result;
 
-            return paths.GroupBy(path => path.Split(System.Convert.ToChar(DelimiterSymbol))[0]);
+            if (paths.All(p => p.StartsWith(DelimiterSymbol)))
+                result = paths.GroupBy(path => SplitByDelimiter(path)[1]);
+
+            result = paths.GroupBy(path => SplitByDelimiter(path)[0]);
+
+            return result;
+        }
+
+        private string[] SplitByDelimiter(string r)
+        {
+            return r.Split(DelimiterSymbol.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }

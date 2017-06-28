@@ -37,6 +37,25 @@ namespace PathsToTree.Tests
 
 
         [Test]
+        public void Convert_Should_Have_Correct_Root_Count_With_MultiCharacter_DelimiterSymbol()
+        {
+            var paths = new[]
+            {
+                "//subFolder1",
+                "//subFolder1//subsubfolder1a",
+                "//subFolder2",
+                "//subFolder2//subsubfolder1b",
+            };
+
+            var sut = new PathToTreeConverter();
+            sut.SetDelimiterSymbol("//");
+
+            var result = sut.Convert(paths);
+
+            Assert.That(result, Has.Count.EqualTo(2));
+        }
+
+        [Test]
         public void Convert_Should_Have_Correct_Root_Count_With_Trailing_DelimiterSymbol()
         {
             var paths = new[]
