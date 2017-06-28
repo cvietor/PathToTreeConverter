@@ -35,7 +35,6 @@ namespace PathsToTree.Tests
             Assert.That(result, Has.Count.EqualTo(2));
         }
 
-
         [Test]
         public void Convert_Should_Have_Correct_Root_Count_With_MultiCharacter_DelimiterSymbol()
         {
@@ -49,6 +48,31 @@ namespace PathsToTree.Tests
 
             var sut = new PathToTreeConverter();
             sut.SetDelimiterSymbol("//");
+
+            var result = sut.Convert(paths);
+
+            Assert.That(result, Has.Count.EqualTo(2));
+        }
+
+        [Test]
+        [TestCase(@"/")]
+        [TestCase(@"\")]
+        [TestCase(@"//")]
+        [TestCase(@"\\")]
+        [TestCase(@"///")]
+        [TestCase(@"\\\")]
+        public void Convert_Should_Have_Correct_Root_Count_With_Any_DelimiterSymbols(string delimiterSymbol)
+        {
+            var paths = new[]
+            {
+                $"{delimiterSymbol}subFolder1",
+                $"{delimiterSymbol}subFolder1{delimiterSymbol}subsubfolder1a",
+                $"{delimiterSymbol}subFolder2",
+                $"{delimiterSymbol}subFolder2{delimiterSymbol}subsubfolder1b",
+            };
+
+            var sut = new PathToTreeConverter();
+            sut.SetDelimiterSymbol(delimiterSymbol);
 
             var result = sut.Convert(paths);
 
