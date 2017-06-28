@@ -4,22 +4,35 @@ using System.Linq;
 
 namespace PathsToTree
 {
-    public class PathToTreeConverter
+    public class PathsToTreeConverter
     {
-        public PathToTreeConverter()
+        public PathsToTreeConverter()
         {
             DelimiterSymbol = "/";
         }
 
+        /// <summary>
+        /// The single- or multicharacter symbol that indicates, at which part the given paths should be splitted.
+        /// Default Value is "/"
+        /// </summary>
         public string DelimiterSymbol { get; private set; }
 
+        /// <summary>
+        /// Converts a list of strings into a Tree model
+        /// </summary>
+        /// <param name="paths"></param>
+        /// <returns></returns>
         public IList<TreeElement> Convert(string[] paths)
         {
-            Validate(paths);
+            if (paths == null) throw new ArgumentNullException(nameof(paths));
 
             return BuildTree(paths).ToList();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="symbol"></param>
         public void SetDelimiterSymbol(string symbol)
         {
             DelimiterSymbol = symbol;
@@ -45,15 +58,9 @@ namespace PathsToTree
             return list;
         }
 
-        private void Validate(IList<string> paths)
-        {
-            if (paths == null) throw new ArgumentNullException(nameof(paths));
-        }
-
         private IList<string> GetChildPaths(IGrouping<string, string> rootPath)
         {
             var splitted = rootPath.Select(SplitByDelimiter).ToList();
-
 
             var result = new List<string>();
             foreach (var s in splitted)
@@ -70,19 +77,13 @@ namespace PathsToTree
 
         private IEnumerable<IGrouping<string, string>> GroupByRootPaths(IList<string> paths)
         {
-            IEnumerable<IGrouping<string, string>> result;
-
-            if (paths.All(p => p.StartsWith(DelimiterSymbol)))
-                result = paths.GroupBy(path => SplitByDelimiter(path)[1]);
-
-            result = paths.GroupBy(path => SplitByDelimiter(path)[0]);
-
-            return result;
+            return paths.GroupBy(path => SplitByDelimiter(path)[0]);
         }
 
         private string[] SplitByDelimiter(string r)
         {
-            return r.Split(DelimiterSymbol.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var result = r.Split(DelimiterSymbol.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            return result;
         }
     }
 }
