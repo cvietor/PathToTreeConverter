@@ -62,7 +62,6 @@ namespace PathsToTree
                 result.Add(childPath);
             }
 
-
             return result;
         }
 

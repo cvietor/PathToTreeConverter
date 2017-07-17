@@ -53,7 +53,7 @@ namespace PathsToTree
             {
                 DelimiterSymbol = "//"
             };
-            var sut = new PathsToTreeConverter();
+            var sut = new PathsToTreeConverter(options);
 
             var result = sut.Convert(paths);
 
