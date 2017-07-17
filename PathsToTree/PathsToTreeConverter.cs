@@ -6,16 +6,14 @@ namespace PathsToTree
 {
     public class PathsToTreeConverter
     {
-        public PathsToTreeConverter()
-        {
-            DelimiterSymbol = "/";
-        }
+        private PathsToTreeConverterOptions Options { get; }
 
-        /// <summary>
-        /// The single- or multicharacter symbol that indicates, at which part the given paths should be splitted.
-        /// Default Value is "/"
-        /// </summary>
-        public string DelimiterSymbol { get; private set; }
+        public PathsToTreeConverter() : this(PathsToTreeConverterOptions.Defaults) { }
+
+        public PathsToTreeConverter(PathsToTreeConverterOptions options) : base()
+        {
+            Options = options;
+        }
 
         /// <summary>
         /// Converts a list of strings into a Tree model
@@ -26,18 +24,11 @@ namespace PathsToTree
         {
             if (paths == null) throw new ArgumentNullException(nameof(paths));
 
-            return BuildTree(paths).ToList();
-        }
+            var tree = BuildTree(paths).ToList();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="symbol"></param>
-        public void SetDelimiterSymbol(string symbol)
-        {
-            DelimiterSymbol = symbol;
+            return tree;
         }
-
+        
         private IList<TreeElement> BuildTree(IList<string> paths)
         {
             var list = new List<TreeElement>();
@@ -67,7 +58,7 @@ namespace PathsToTree
             {
                 if (s.Length <= 1) continue;
 
-                var childPath = string.Join(DelimiterSymbol, s.ToList().GetRange(1, s.Length - 1));
+                var childPath = string.Join(Options.DelimiterSymbol, s.ToList().GetRange(1, s.Length - 1));
                 result.Add(childPath);
             }
 
@@ -82,7 +73,7 @@ namespace PathsToTree
 
         private string[] SplitByDelimiter(string r)
         {
-            var result = r.Split(DelimiterSymbol.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var result = r.Split(Options.DelimiterSymbol.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             return result;
         }
     }

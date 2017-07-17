@@ -6,17 +6,6 @@ namespace PathsToTree
     public class PathsToTreeConverterTests
     {
         [Test]
-        public void Set_Delimiter_Symbol_Should_Succeed()
-        {
-            string delimiterSymbol = "%";
-
-            var sut = new PathsToTreeConverter();
-            sut.SetDelimiterSymbol(delimiterSymbol);
-
-            Assert.That(sut.DelimiterSymbol, Is.EqualTo("%"));
-        }
-
-        [Test]
         public void Convert_Should_Return_One_Element_When_Only_A_Simple_String_Is_Passed()
         {
             var paths = new[]
@@ -60,8 +49,11 @@ namespace PathsToTree
                 "//subFolder2//subsubfolder1b",
             };
 
+            var options = new PathsToTreeConverterOptions()
+            {
+                DelimiterSymbol = "//"
+            };
             var sut = new PathsToTreeConverter();
-            sut.SetDelimiterSymbol("//");
 
             var result = sut.Convert(paths);
 
@@ -85,8 +77,11 @@ namespace PathsToTree
                 $"{delimiterSymbol}subFolder2{delimiterSymbol}subsubfolder1b",
             };
 
-            var sut = new PathsToTreeConverter();
-            sut.SetDelimiterSymbol(delimiterSymbol);
+            var options = new PathsToTreeConverterOptions()
+            {
+                DelimiterSymbol = delimiterSymbol
+            };
+            var sut = new PathsToTreeConverter(options);
 
             var result = sut.Convert(paths);
 

@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PathsToTreeConverter.cs" />
+    <Compile Include="PathsToTreeConverterOptions.cs" />
     <Compile Include="PathsToTreeConverterTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

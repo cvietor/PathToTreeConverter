@@ -15,9 +15,12 @@ namespace PathsToTree
                 "//subFolder2//subsubfolder1b"
             };
 
-            var converter = new PathsToTreeConverter();
-            converter.SetDelimiterSymbol("//");
-
+            var options = new PathsToTreeConverterOptions()
+            {
+                DelimiterSymbol = "//"
+            };
+            var converter = new PathsToTreeConverter(options);
+            
             var result = converter.Convert(paths);
 
             foreach (var treeElement in result)
