@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace PathsToTree
+namespace PathsToTree.Tests
 {
     [TestFixture]
     public class PathsToTreeConverterTests
@@ -145,6 +145,40 @@ namespace PathsToTree
 
             Assert.That(result[0].Children, Has.Count.EqualTo(1));
             Assert.That(result[0].Children[0].Children, Has.Count.EqualTo(2));
+        }
+
+        [Test]
+        public void Convert_Should_Output_in_Correct_Format_When_No_Formatter_Is_Defined()
+        {
+            var paths = new[]
+            {
+                "subFolder1/subsubfolder1",
+            };
+
+            var sut = new PathsToTreeConverter();
+
+            var result = sut.Convert(paths);
+
+            Assert.That(result[0].Name, Is.EquivalentTo("subFolder1"));
+            Assert.That(result[0].Children[0].Name, Is.EquivalentTo("subsubfolder1"));
+        }
+
+        [Test]
+        public void Convert_Should_Output_in_Correct_Format_When_Custom_Formatter_Is_Defined()
+        {
+            var paths = new[]
+            {
+                "subFolder1/subsubfolder1",
+            };
+
+
+
+            var sut = new PathsToTreeConverter();
+
+            var result = sut.Convert(paths);
+
+            Assert.That(result[0].Name, Is.EquivalentTo("subFolder1"));
+            Assert.That(result[0].Children[0].Name, Is.EquivalentTo("subsubfolder1"));
         }
     }
 }
