@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Formatters\CompletePathFormatter.cs" />
+    <Compile Include="ITreeNodeFormatter.cs" />
     <Compile Include="PathsToTreeConverter.cs" />
     <Compile Include="PathsToTreeConverterOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

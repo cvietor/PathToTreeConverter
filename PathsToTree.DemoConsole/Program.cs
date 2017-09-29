@@ -1,4 +1,5 @@
 ﻿using System;
+using PathsToTree.DemoConsole.Extensions;
 
 namespace PathsToTree.DemoConsole
 {
@@ -19,27 +20,13 @@ namespace PathsToTree.DemoConsole
             {
                 DelimiterSymbol = "//"
             });
-            
+
             var result = converter.Convert(paths);
 
             foreach (var treeElement in result)
                 treeElement.PrintPretty("", Console.WriteLine);
 
             Console.Read();
-        }
-    }
-
-    public static class ConsoleExtensions
-    {
-        public static void PrintPretty(this TreeElement me, string prefix, Action<string> output)
-        {
-            output($"{prefix} + {me.Name}");
-
-            foreach (var n in me.Children)
-                if (me.Children.IndexOf(n) == me.Children.Count - 1)
-                    n.PrintPretty(prefix + "    ", output);
-                else
-                    n.PrintPretty(prefix + "   |", output);
         }
     }
 }

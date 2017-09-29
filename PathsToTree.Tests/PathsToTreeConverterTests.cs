@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using Moq;
+using NUnit.Framework;
 
 namespace PathsToTree.Tests
 {
@@ -159,8 +161,8 @@ namespace PathsToTree.Tests
 
             var result = sut.Convert(paths);
 
-            Assert.That(result[0].Name, Is.EquivalentTo("subFolder1"));
-            Assert.That(result[0].Children[0].Name, Is.EquivalentTo("subsubfolder1"));
+            Assert.That(result[0].Name, Is.EqualTo("subFolder1"));
+            Assert.That(result[0].Children[0].Name, Is.EqualTo("subsubfolder1"));
         }
 
         [Test]
@@ -171,14 +173,31 @@ namespace PathsToTree.Tests
                 "subFolder1/subsubfolder1",
             };
 
+            var expectedResult = new List<TreeElement>()
+            {
+                new TreeElement()
+                {
+                    Name = "subfolder1",
+                    Children = new List<TreeElement>()
+                    {
+                        new TreeElement()
+                        {
+                            Name = "subfolder1/subsubfolder1"
+                        }
+                    }
+                }
+            };
 
-
+            var formatterMock = Mock.Of<ITreeNodeFormatter>(f =>
+                f.Format(It.IsAny<IList<TreeElement>>()) == expectedResult);
+            
             var sut = new PathsToTreeConverter();
+            sut.Formatter = formatterMock;
 
             var result = sut.Convert(paths);
 
-            Assert.That(result[0].Name, Is.EquivalentTo("subFolder1"));
-            Assert.That(result[0].Children[0].Name, Is.EquivalentTo("subsubfolder1"));
+            Assert.That(result[0].Name, Is.EqualTo("subfolder1"));
+            Assert.That(result[0].Children[0].Name, Is.EqualTo("subfolder1/subsubfolder1"));
         }
     }
 }

@@ -7,6 +7,7 @@ namespace PathsToTree
     public class PathsToTreeConverter
     {
         private PathsToTreeConverterOptions Options { get; }
+        public ITreeNodeFormatter Formatter { get; set; }
 
         public PathsToTreeConverter() : this(PathsToTreeConverterOptions.Defaults) { }
 
@@ -25,6 +26,8 @@ namespace PathsToTree
             if (paths == null) throw new ArgumentNullException(nameof(paths));
 
             var tree = BuildTree(paths).ToList();
+
+            if (this.Formatter != null) return this.Formatter.Format(tree);
 
             return tree;
         }
